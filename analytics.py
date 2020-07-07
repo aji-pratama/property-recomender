@@ -23,7 +23,7 @@ sc = SparkContext.getOrCreate("local")
 locale = spark._jvm.java.util.Locale
 locale.setDefault(locale.forLanguageTag("en-US"))
 
-# Load dataset
+# Load data
 property_df = spark.read\
     .format("com.mongodb.spark.sql.DefaultSource")\
     .option("database", "finalproject")\
