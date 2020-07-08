@@ -14,8 +14,8 @@ from pyspark.sql.functions import col, isnan
 spark = SparkSession\
     .builder\
     .master('local')\
-    .config('spark.mongodb.input.uri', 'mongodb://127.0.0.1:27017/propertify')\
-    .config('spark.mongodb.output.uri', 'mongodb://127.0.0.1:27017/propertify')\
+    .config('spark.mongodb.input.uri', 'mongodb://127.0.0.1:27017/finalproject')\
+    .config('spark.mongodb.output.uri', 'mongodb://127.0.0.1:27017/finalproject')\
     .config('spark.jars.packages', 'org.mongodb.spark:mongo-spark-connector_2.11:2.2.1')\
     .getOrCreate()
 
