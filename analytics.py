@@ -27,7 +27,7 @@ locale.setDefault(locale.forLanguageTag("en-US"))
 property_df = spark.read\
     .format("com.mongodb.spark.sql.DefaultSource")\
     .option("database", "finalproject")\
-    .option("collection", "property")\
+    .option("collection", "property_db")\
     .load()
 
 # Text Processing
