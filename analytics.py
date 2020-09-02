@@ -1,3 +1,5 @@
+import json
+
 import numpy as np
 from pyspark import SparkContext
 from pyspark.ml import Pipeline
@@ -27,7 +29,7 @@ locale.setDefault(locale.forLanguageTag("en-US"))
 property_df = spark.read\
     .format("com.mongodb.spark.sql.DefaultSource")\
     .option("database", "finalproject")\
-    .option("collection", "property_db")\
+    .option("collection", "property_test")\
     .load()
 
 # Text Processing
@@ -79,11 +81,16 @@ def get_precision_test(key_words):
         .withColumnRenamed('_1', 'property_id') \
         .withColumnRenamed('_2', 'score')\
         .orderBy("score", ascending=False)
+    retrieved_data = sim_property_byword_df.filter((col('score')>0.01) & (col('score')<1.1) & (~isnan('score')))
+    
+    retrieve_data = retrieved_data.count()
     relevan_data = sim_property_byword_df.filter((col('score')>0.1) & (col('score')<1.1) & (~isnan('score'))).count()
-    retrieve_data = sim_property_byword_df.filter((col('score')>0.01) & (col('score')<1.1) & (~isnan('score'))).count()
+    property_rdd = get_property_details(retrieved_data)
     test_result = relevan_data/(relevan_data+retrieve_data)
     result = {
-        "data": recomendation_rdd.toJSON().map(lambda j: json.loads(j)).collect(),
+        "data": property_rdd.toJSON().map(lambda j: json.loads(j)).collect(),
+        "relevan_data": relevan_data,
+        "retrieve_data": retrieve_data,
         "precision_test": test_result
     }
     return result

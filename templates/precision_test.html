@@ -14,7 +14,7 @@
   <div class="section section-components">
     <div class="bg-secondary">
       <div class="container">
-        <h2>Property Recomendation System with Spark</h2>
+        <h2>Precision Test: Recomendation System with Spark</h2>
       </div>
 
       <div id="app" class="container">
@@ -32,15 +32,24 @@
         </div>
 
         <div v-else>
-          <div v-if="data.length>0" class="mb-2">
-              {{ data.length }} data similiar
+          <div v-if="data.data.length>0" class="mb-2">
+              {{ data.data.length }} data similiar
+              <div>
+                Retrieve: {{ data.retrieve_data }}
+              </div>
+              <div>
+                Relevan: {{ data.relevan_data }}
+              </div>
+              <div>
+                Precision: {{ data.precision_test }}
+              </div>
           </div>
           <div v-if="data.length==0" class="card shadow mb-2">
             <div class="card-body">
               No Data Similiar...
             </div>
           </div>
-          <div v-else v-for="item in data" class="card shadow mb-2">
+          <div v-else v-for="item in data.data" class="card shadow mb-2">
             <a :href="`${item.url}`" target="_blank" rel="nofollow">
               <div class="card-body">
                 <h5 class="title"> {{ item.name }} </h5>
@@ -67,6 +76,9 @@ new Vue({
       data: null,
       getKeyword: '',
       keyword: null,
+      retrieve: null,
+      relevan: null,
+      precision: null,
       loading: 1,
     }
   },
@@ -75,7 +87,7 @@ new Vue({
       this.keyword = this.getKeyword;
       this.loading = 2
       axios
-        .get('http://127.0.0.1:5000/api/precision-test/?q=' + this.keyword)
+        .get('http://127.0.0.1:5000/api/precision/?q=' + this.keyword)
         .then(response => (this.data = response.data))
         .finally(() => this.loading = 3)
     },
