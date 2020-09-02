@@ -67,3 +67,23 @@ def get_keywords_recomendations(key_words, sim_bus_limit=20):
         (col('score')>0) & (~isnan('score'))
     ).limit(sim_bus_limit)
     return get_property_details(result)
+
+
+def get_precision_test(key_words):
+    input_words_df = sc.parallelize([(0, key_words)]).toDF(['_id', 'text'])
+    input_words_df = pipeline_mdl.transform(input_words_df)
+    input_key_words_vec = input_words_df.select('idf_vec').collect()[0][0]
+    sim_property_byword_rdd = sc.parallelize((i[0], float(cosine_sim(input_key_words_vec, i[1]))) for i in all_property_vecs)
+    property_rdd = sim_property_byword_rdd.sortBy(lambda a: -a[1]).collect()
+    sim_property_byword_df = spark.createDataFrame(property_rdd) \
+        .withColumnRenamed('_1', 'property_id') \
+        .withColumnRenamed('_2', 'score')\
+        .orderBy("score", ascending=False)
+    relevan_data = sim_property_byword_df.filter((col('score')>0.1) & (col('score')<1.1) & (~isnan('score'))).count()
+    retrieve_data = sim_property_byword_df.filter((col('score')>0.01) & (col('score')<1.1) & (~isnan('score'))).count()
+    test_result = relevan_data/(relevan_data+retrieve_data)
+    result = {
+        "data": recomendation_rdd.toJSON().map(lambda j: json.loads(j)).collect(),
+        "precision_test": test_result
+    }
+    return result
