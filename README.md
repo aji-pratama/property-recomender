@@ -14,7 +14,7 @@
 2. Run Crawler: 
     - ` $ scrapy crawl dotproperty`
     - ` $ scrapy crawl rumahcom`
-    - ` $ scrapy crawl lamudi
+    - ` $ scrapy crawl lamudi `
 
 3. Run Appliaction
     - ` $ python run.py`
