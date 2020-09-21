@@ -1,4 +1,4 @@
-# Peopertify is Recomendation System to find the best property based on keyword using Cosine Similiarity TF-IDF Method
+# Propertify is Recomendation System to find the best property based on keyword using Cosine Similiarity TF-IDF Method
 
 #### Prerequisite
 - Python >3.6
