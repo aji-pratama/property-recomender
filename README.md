@@ -3,6 +3,7 @@
 #### Prerequisite
 - Python >3.6
 - Java/JDK 
+- Pyspark
 
 
 ### Install Package
